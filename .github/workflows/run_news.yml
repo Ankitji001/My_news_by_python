@@ -1,0 +1,27 @@
+name: Live News Runner
+
+# Controls when the script runs (runs automatically on every code push)
+on: [push]
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Set up Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Project Libraries
+      run: |
+        pip install requests python-dotenv
+
+    - name: Execute Python Script with Hidden Secret
+      # This injects your separate GitHub Secret into the script's memory safely!
+      env:
+        NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+      run: python news_console.py
